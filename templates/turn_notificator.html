@@ -19,9 +19,9 @@
 
         let jqxhr = $.ajax("{% url 'whos-turn' game_id %}").done(function (result) {
             if (result['player_name'] === "{{ player_name }}" ) {
+                alertShown = true;
                 if (!alertShown) {
                     alert("TWOJA TURA");
-                    alertShown = true;
                 }
                 $('#id_your_turn').show();
                 $('#id_not_your').hide();

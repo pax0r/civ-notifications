@@ -8,15 +8,14 @@
     Nie twoja tura.
     </h2>
     <script>
-        {% if players_turn %}
-            $('#id_not_your').hide();
-        {% else %}
-            $('#id_your_turn').hide();
-        {% endif %}
+    {% if players_turn %}
+        $('#id_not_your').hide();
+    {% else %}
+        $('#id_your_turn').hide();
+    {% endif %}
+    let alertShown = {{ players_turn|lower }};
 
     function check_turn() {
-        let alertShown = {{ players_turn|lower }};
-
         let jqxhr = $.ajax("{% url 'whos-turn' game_id %}").done(function (result) {
             if (result['player_name'] === "{{ player_name }}" ) {
                 alertShown = true;

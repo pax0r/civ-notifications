@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.urls import path
 
-from web.views import CivWebhookHandler, WhosTurnIsAnyway
+from web.views import CivWebhookHandler, WhosTurnIsAnyway, PlayerNotifier
 
 urlpatterns = [
     path('hook/', CivWebhookHandler.as_view()),
-    path('<int:game_id>/', WhosTurnIsAnyway.as_view())
+    path('<int:game_id>/', WhosTurnIsAnyway.as_view(), name='whos-turn'),
+    path('<int:game_id>/<int:player_id>/', PlayerNotifier.as_view(), name='notifier')
     #path('admin/', admin.site.urls),
 ]

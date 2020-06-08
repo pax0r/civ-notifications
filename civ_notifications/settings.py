@@ -12,19 +12,12 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import environ
-import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env(
-    # set casting, default value
     DEBUG=(bool, False)
 )
-# reading .env file
-environ.Env.read_env()
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'y8e&5tr#pkdqp_e!wrw^1ybr+1^vdld6i@my6#%a*r0(b@su@x'
@@ -84,7 +77,7 @@ WSGI_APPLICATION = 'civ_notifications.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600),
+    'default': env.db(),
 }
 
 

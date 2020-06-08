@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h3>Powiadomienia dla gracza {{ player_name }}</h3>
+    <h1 id="id_your_turn" class="blink">
+    TWOJA TURA!
+    </h1>
+    <h2 id="id_not_your">
+    Nie twoja tura.
+    </h2>
+    <script>
+        {% if players_turn %}
+            $('#id_not_your').hide();
+        {% else %}
+            $('#id_your_turn').hide();
+        {% endif %}
+
+    function check_turn() {
+        let alertShown = {{ players_turn|lower }};
+
+        let jqxhr = $.ajax("{% url 'whos-turn' game_id %}").done(function (result) {
+            if (result['player_name'] === "{{ player_name }}" ) {
+                if (!alertShown) {
+                    alert("TWOJA TURA");
+                    alertShown = true;
+                }
+                $('#id_your_turn').show();
+                $('#id_not_your').hide();
+            } else {
+                $('#id_your_turn').hide();
+                $('#id_not_your').show();
+                alertShown = false;
+            }
+        })
+    }
+
+    setInterval(check_turn, 1000);
+    </script>
+{% endblock %}

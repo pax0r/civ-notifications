@@ -1,16 +1,12 @@
-FROM alpine:3.7
+FROM python:3.8-slim-buster
 EXPOSE 3031
 
 WORKDIR /usr/src/app
 
-RUN apk add --no-cache \
-        uwsgi-python3 \
-        python3 \
-        python3-dev \
-        postgresql-dev \
-        alpine-sdk
+RUN apt-get update && apt-get install -y build-essential libpq-dev
 
 COPY . .
-RUN pip3 install --no-cache-dir -U pip setuptools wheel
+RUN pip3 install --no-cache-dir -U pip setuptools wheel uwsgi
 RUN pip3 install --no-cache-dir -r requirements.txt
-CMD [ "uwsgi", "--ini", "uwsgi.ini" ]
+RUN chmod +x run.sh
+CMD ["run.sh"]

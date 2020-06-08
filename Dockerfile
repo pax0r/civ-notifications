@@ -11,10 +11,6 @@ RUN apk add --no-cache \
         alpine-sdk
 
 COPY . .
-
+RUN pip3 install --no-cache-dir -U pip setuptools wheel
 RUN pip3 install --no-cache-dir -r requirements.txt
-CMD [ "uwsgi", "--socket", "0.0.0.0:3031", \
-               "--uid", "uwsgi", \
-               "--plugins", "python3", \
-               "--protocol", "uwsgi", \
-               "--wsgi", "civ_notifications.wsgi:application" ]
+CMD [ "uwsgi", "--ini", "uwsgi.ini" ]

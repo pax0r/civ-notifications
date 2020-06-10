@@ -3,9 +3,10 @@ import json
 from django.http import JsonResponse, HttpRequest
 from django.shortcuts import get_object_or_404
 from django.views import View
-from django.views.generic import TemplateView, DetailView, ListView
+from django.views.generic import TemplateView
 
-from web.models import LastPlayerTurn, Player, Game
+from web.models import LastPlayerTurn, Player
+from web.signals import turn_notifications
 
 
 class CivWebhookHandler(View):
@@ -14,7 +15,13 @@ class CivWebhookHandler(View):
         game_name = data['value1']
         player_name = data['value2']
         turn_number = int(data['value3'])
-        LastPlayerTurn.objects.set_current_turn(game_name, player_name, turn_number)
+        turn_obj = LastPlayerTurn.objects.set_current_turn(game_name, player_name, turn_number)
+        turn_notifications.send(
+            LastPlayerTurn,
+            game_id=turn_obj.game.id,
+            player_id=turn_obj.player.id,
+            turn_number=turn_obj.turn_number,
+        )
         return JsonResponse({'status': 'ok'})
 
 

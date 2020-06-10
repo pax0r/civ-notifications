@@ -1,0 +1,13 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "3031:3031"
+    environment:
+      DATABASE_URL: "postgres://postgres:postgres@postgresql/postgres"
+      REDIS_URL: "redis"
+  redis:
+    image: "redis:alpine"
+  postgresql:
+    image: "postgres:latest"

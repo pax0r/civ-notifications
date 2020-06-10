@@ -18,6 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env(
     DEBUG=(bool, False)
 )
+environ.Env.read_env()
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'y8e&5tr#pkdqp_e!wrw^1ybr+1^vdld6i@my6#%a*r0(b@su@x'
@@ -39,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_rq",
+
     'web',
+    "discord",
 ]
 
 MIDDLEWARE = [
@@ -78,6 +82,17 @@ WSGI_APPLICATION = 'civ_notifications.wsgi.application'
 
 DATABASES = {
     'default': env.db(),
+}
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': env('REDIS_URL'),
+        'PORT': env.int('REDIS_PORT', default=6379),
+        'DB': env.int('REDIS_DB', default=0),
+        'PASSWORD': env('REDIS_PASS', default=None),
+        'DEFAULT_TIMEOUT': 360,
+        'ASYNC': env("RQ_ASYNC", default=not DEBUG)
+    },
 }
 
 

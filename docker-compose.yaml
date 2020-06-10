@@ -5,9 +5,11 @@ services:
     ports:
       - "3031:3031"
     environment:
-      DATABASE_URL: "postgres://postgres:postgres@postgresql/postgres"
+      DATABASE_URL: "postgres://postgres:postgress_pass@postgresql/postgres"
       REDIS_URL: "redis"
   redis:
     image: "redis:alpine"
   postgresql:
     image: "postgres:latest"
+    environment:
+      POSTGRES_PASSWORD: postgress_pass

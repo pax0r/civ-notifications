@@ -7,6 +7,9 @@ services:
     environment:
       DATABASE_URL: "postgres://postgres:postgress_pass@postgresql/postgres"
       REDIS_URL: "redis"
+    depends_on:
+      - "postgresql"
+      - "redis"
   redis:
     image: "redis:alpine"
   postgresql:

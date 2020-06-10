@@ -9,4 +9,4 @@ COPY . .
 RUN pip3 install --no-cache-dir -U pip setuptools wheel uwsgi
 RUN pip3 install --no-cache-dir -r requirements.txt
 RUN chmod +x run.sh
-CMD ["run.sh"]
+CMD ["./run.sh"]

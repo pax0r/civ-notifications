@@ -4,7 +4,7 @@ EXPOSE 3031
 
 WORKDIR /usr/src/app
 
-RUN apt-get update && apt-get install -y build-essential libpq-dev
+RUN apt-get update && apt-get install -y build-essential libpq-dev libpcre3 libpcre3-dev
 
 COPY . .
 RUN  --mount=type=cache,target=/root/.cache/pip pip3 install -U pip setuptools wheel uwsgi

@@ -218,3 +218,5 @@ pip-selfcheck.json
 
 *.sqlite
 /.idea/
+static/*
+!static/.placeholder

@@ -16,11 +16,12 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import path
+from django.urls import path, include
 
 from web.views import CivWebhookHandler, WhosTurnIsAnyway, PlayerNotifier
 
 urlpatterns = [
+    path('admin/django-rq/', include('django_rq.urls')),
     path('admin/', admin.site.urls),
     path('hook/', CivWebhookHandler.as_view()),
     path('<int:game_id>/', WhosTurnIsAnyway.as_view(), name='whos-turn'),

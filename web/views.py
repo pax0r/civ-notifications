@@ -15,13 +15,14 @@ class CivWebhookHandler(View):
         game_name = data['value1']
         player_name = data['value2']
         turn_number = int(data['value3'])
-        turn_obj = LastPlayerTurn.objects.set_current_turn(game_name, player_name, turn_number)
-        turn_notifications.send(
-            LastPlayerTurn,
-            game_id=turn_obj.game.id,
-            player_id=turn_obj.player.id,
-            turn_number=turn_obj.turn_number,
-        )
+        turn_obj, changed = LastPlayerTurn.objects.set_current_turn(game_name, player_name, turn_number)
+        if changed:
+            turn_notifications.send(
+                LastPlayerTurn,
+                game_id=turn_obj.game.id,
+                player_id=turn_obj.player.id,
+                turn_number=turn_obj.turn_number,
+            )
         return JsonResponse({'status': 'ok'})
 
 

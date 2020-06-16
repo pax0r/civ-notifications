@@ -23,11 +23,19 @@ class LastPlayerTurnManager(models.Manager):
         player, created = Player.objects.get_or_create(
             name=civilization_nick, defaults={'name': civilization_nick}
         )
-        obj, created = self.update_or_create(
-            game=game,
-            defaults={'player': player, 'game': game, 'turn_number': turn_number},
-        )
-        return obj
+        obj, created = self.get_or_create(game=game, defaults={
+            'player': player, 'game': game, 'turn_number': turn_number
+        })
+        if not created:
+            changed = False
+            if obj.player != player or obj.turn_number != turn_number:
+                obj.player = player
+                obj.turn_number = turn_number
+                obj.save()
+                changed = True
+        else:
+            changed = True
+        return obj, changed
 
 
 class LastPlayerTurn(models.Model):

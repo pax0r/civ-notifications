@@ -1,5 +1,5 @@
-Civilization VI discord notifications
-=====================================
+Civilization VI - Who's turn it is any way?
+===========================================
 
 Simple Django app to show who's turn it is and send some notification on Discord channel.
 
@@ -18,7 +18,7 @@ After that it is enough to run `docker-compose up -d`. It will deploy three dock
 3) `redis` instance for RQ
 
 By default `uwsgi` exposes the application through `uwsgi` protocol so you need a reverse proxy nginx to 
-forward requests to Docker container. 
+forward requests to Docker container.
 
 ## Civilization VI webhook
 
@@ -29,6 +29,18 @@ http://<your-host-name>/webhook/
 **WARNING:** For some reason Civilization VI does not send proper webhooks for `https` endpoints so sadly you NEED TO use `http`.
 Feel free to configure your webserver to redirect every other url to `https`.
 
+Also be aware of the fact that sometimes it requires 2-3 turns for Civilization to start sending webhooks.
+
+## Current player information
+
+After first webhook from Civilization there will be a game object automatically created and `game_id` will be set.
+
+You can see your games in Django Admin panel. 
+
+To check who's turn it is check url:
+```
+http://<your.hostname>/<game_id>/
+``` 
 
 ## Discord notifications
 

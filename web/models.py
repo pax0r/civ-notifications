@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 
 
 class Game(models.Model):
@@ -17,25 +17,29 @@ class Player(models.Model):
 
 class LastPlayerTurnManager(models.Manager):
     def set_current_turn(self, game_name, civilization_nick, turn_number):
-        game, created = Game.objects.get_or_create(
-            name=game_name, defaults={'name': game_name}
-        )
-        player, created = Player.objects.get_or_create(
-            name=civilization_nick, defaults={'name': civilization_nick}
-        )
-        obj, created = self.get_or_create(game=game, defaults={
-            'player': player, 'game': game, 'turn_number': turn_number
-        })
-        if not created:
-            changed = False
-            if obj.player != player or obj.turn_number != turn_number:
-                obj.player = player
-                obj.turn_number = turn_number
-                obj.save()
+        with transaction.atomic():
+            game, created = Game.objects.get_or_create(
+                name=game_name, defaults={'name': game_name}
+            )
+            player, created = Player.objects.get_or_create(
+                name=civilization_nick, defaults={'name': civilization_nick}
+            )
+            try:
+                obj = self.select_for_update().get(game=game)
+                changed = False
+                if obj.player != player or obj.turn_number != turn_number:
+                    obj.player = player
+                    obj.turn_number = turn_number
+                    obj.save()
+                    changed = True
+            except LastPlayerTurn.DoesNotExist:
+                obj = self.create(
+                    player=player,
+                    game=game,
+                    turn_number=turn_number
+                )
                 changed = True
-        else:
-            changed = True
-        return obj, changed
+            return obj, changed
 
 
 class LastPlayerTurn(models.Model):

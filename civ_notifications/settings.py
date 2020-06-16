@@ -18,16 +18,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env(
     DEBUG=(bool, False)
 )
-environ.Env.read_env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'y8e&5tr#pkdqp_e!wrw^1ybr+1^vdld6i@my6#%a*r0(b@su@x'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
 if not DEBUG:
-    ALLOWED_HOSTS = ["civ.biernacki.me"]
+    ALLOWED_HOSTS = [env("HOSTNAME")]
 else:
     ALLOWED_HOSTS = []
 

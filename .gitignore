@@ -104,7 +104,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-civ_notifications/.env
+.env
 .venv
 env/
 venv/
@@ -220,3 +220,4 @@ pip-selfcheck.json
 /.idea/
 static/*
 !static/.placeholder
+/.env

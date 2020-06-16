@@ -1,12 +1,14 @@
-version: '2'
+version: '3'
 services:
   web:
     build: .
     ports:
-      - "3031:3031"
+      - "127.0.0.1:${HOST_PORT}:3031"
     environment:
-      DATABASE_URL: "postgres://postgres:postgress_pass@postgresql/postgres"
+      DATABASE_URL: "postgres://postgres:${POSTGRES_PASS}@postgresql/postgres"
       REDIS_URL: "redis"
+      HOSTNAME:
+      SECRET_KEY:
     depends_on:
       - "postgresql"
       - "redis"
@@ -15,4 +17,4 @@ services:
   postgresql:
     image: "postgres:latest"
     environment:
-      POSTGRES_PASSWORD: postgress_pass
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
